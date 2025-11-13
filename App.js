@@ -1,30 +1,48 @@
-import React {useState} from 'react';
+import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput,
+ Button, SafeAreaView, FlatList
+} from 'react-native';
 
 export default function App() {
 const [nombre, setNombre]=useState('');
+const [productos, setProductos]=useState([]);
+const [cantidad, setCantidad]=useState('');
+const showInput= ()=>{
+	if(nombre.trim()==='')return;
+	const nuevo={
+		id: Date.now().toString(), nombre, cantidad
+	};
+	setProductos([...productos, nuevo]);
+	setNombre=('');
+	setCantidad=('');
+};
   return (
-  <>
+  <SafeAreaView style={styles.container}>
   
-    <View style={styles.container}><Text>hola {nombre}
-    </Text>  <StatusBar style="auto" />
-    </View>
-    <View style={styles.p}><Text>Soy duvan</Text
-    ><StatusBar style="auto"/>   
-	<TextInput style={styles.input}
+    <Text>hola </Text>  
+    
+    <Text>Escribe tu nombre</Text>
+    	<TextInput style={styles.input}
 	 placeholder='Escribe tu nombre aqui'
 	 onChangeText={(texto)=> setNombre(texto)} />
-	 <Button>Presiona aqui</Button>
-    </View>
-    
-</>
+	 <Button title='Presiona aqui' onPress={showInput}
+	 ></Button>
+   
+    <FlatList
+      data={productos}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <Text>{item.nombre} - {item.cantidad}</Text>
+      )}
+    />
+</SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0.5,
+    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
@@ -43,3 +61,4 @@ const styles = StyleSheet.create({
       borderRadius: 5,
     },
 });
+
